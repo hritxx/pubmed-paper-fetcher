@@ -1,21 +1,20 @@
 [project]
-name = "pubmed-paper-fetcher"
-version = "0.1.0"
-description = ""
-authors = [
-    {name = "hritxx",email = "hriteekroy1869@gmail.com"}
-]
+name = "pubmed-paper-fetcher-cli"
+version = "0.1.2"
+description = "Fetch PubMed research papers with industry affiliations."
 readme = "README.md"
-requires-python = ">=3.9"
+license = "MIT"
+authors = [{name = "hritxx", email = "hriteekroy1869@gmail.com"}]
+urls = { "repository" = "https://github.com/hritxx/pubmed-paper-fetcher" }
 dependencies = [
-    "requests (>=2.32.3,<3.0.0)",
-    "pandas (>=2.2.3,<3.0.0)",
-    "lxml (>=5.3.1,<6.0.0)"
+	"python>=3.9",
+	"requests>=2.32.3,<3.0.0",
+	"pandas>=2.2.3,<3.0.0",
+	"lxml>=5.0.0,<6.0.0"
 ]
 
-[tool.poetry]
-packages = [{include = "pubmed_paper_fetcher", from = "src"}]
-
+[project.scripts]
+get-papers-list = "cli:main"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

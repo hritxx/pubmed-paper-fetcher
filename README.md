@@ -13,16 +13,16 @@ poetry.lock
 pyproject.toml
 README.md
 src/
-    pubmed_paper_fetcher/
+    pubmed_paper_fetcher_cli/
         __init__.py
-        results.csv
+        cli.py
+        fetch.py
 tests/
     __init__.py
 ```
 
 - `pyproject.toml`: Contains project metadata and dependencies.
-- `src/pubmed_paper_fetcher/__init__.py`: Main script to fetch and process PubMed papers.
-- `src/pubmed_paper_fetcher/results.csv`: Example CSV file with fetched results.
+- `src/pubmed_paper_fetcher_cli/`: Contains the main scripts to fetch and process PubMed papers.
 - `tests/__init__.py`: Placeholder for unit tests.
 
 ## Installation
@@ -40,7 +40,7 @@ This will install all the required dependencies specified in the `pyproject.toml
 To execute the program, use the following command:
 
 ```sh
-poetry run python src/pubmed_paper_fetcher/__init__.py <query> [-f <filename>] [-d]
+poetry run python src/pubmed_paper_fetcher_cli/cli.py <query> [-f <filename>] [-d]
 ```
 
 - `<query>`: The search query for PubMed.
@@ -50,7 +50,7 @@ poetry run python src/pubmed_paper_fetcher/__init__.py <query> [-f <filename>] [
 Example:
 
 ```sh
-poetry run python src/pubmed_paper_fetcher/__init__.py "cancer research" -f results.csv -d
+poetry run python src/pubmed_paper_fetcher_cli/cli.py "cancer research" -f results.csv -d
 ```
 
 ## Tools and Libraries

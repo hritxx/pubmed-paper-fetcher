@@ -9,6 +9,7 @@ __pycache__/
 .venv/
 env/
 venv/
+dist/
 
 # Poetry-related files
 poetry.lock
