@@ -1,13 +1,14 @@
 import requests
 import pandas as pd
+import re
 import xml.etree.ElementTree as ET
 from typing import List, Dict
 
-# PubMed API base URL
+
 PUBMED_SEARCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
 PUBMED_FETCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
 
-# Keywords to detect pharmaceutical or biotech companies
+
 NON_ACADEMIC_KEYWORDS = ["Pharma", "Biotech", "Therapeutics", "Genomics", "Biosciences", "Corporation"]
 
 def fetch_pubmed_ids(query: str) -> List[str]:
@@ -47,6 +48,7 @@ def fetch_paper_details(pubmed_ids: List[str]) -> List[Dict]:
         authors = article.findall(".//Author")
         non_academic_authors = []
         company_affiliations = []
+        corresponding_email = "N/A"
         
         for author in authors:
             affiliation = author.find(".//Affiliation")
@@ -55,8 +57,20 @@ def fetch_paper_details(pubmed_ids: List[str]) -> List[Dict]:
                 if any(keyword in affiliation_text for keyword in NON_ACADEMIC_KEYWORDS):
                     non_academic_authors.append(author.find(".//LastName").text)
                     company_affiliations.append(affiliation_text)
+                
+                # Extract email using regex
+                email_match = re.search(r'[\w\.-]+@[\w\.-]+', affiliation_text)
+                if email_match and corresponding_email == "N/A":
+                    corresponding_email = email_match.group(0)
+
+        # 🔹 Extract email from <CommentsCorrections> if not found
+        if corresponding_email == "N/A":
+            for comment in article.findall(".//CommentsCorrections[@RefType='Correspondence']"):
+                email_match = re.search(r'[\w\.-]+@[\w\.-]+', comment.text if comment.text else "")
+                if email_match:
+                    corresponding_email = email_match.group(0)
+                    break  # Stop after finding the first email
         
-        corresponding_email = "N/A"  # Could extract if present
         papers.append({
             "PubmedID": pmid,
             "Title": title,

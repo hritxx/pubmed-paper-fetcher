@@ -1,6 +1,6 @@
 [project]
 name = "pubmed-paper-fetcher-cli"
-version = "0.1.2"
+version = "0.2.0"
 description = "Fetch PubMed research papers with industry affiliations."
 readme = "README.md"
 license = "MIT"
