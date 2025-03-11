@@ -1,0 +1,32 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+.env
+.venv/
+env/
+venv/
+
+# Poetry-related files
+poetry.lock
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs & Debug files
+*.log
+
+# Jupyter notebooks checkpoints (if used)
+.ipynb_checkpoints/
+
+# Output files
+*.csv
+
+# IDE / Editor settings
+.vscode/
+.idea/
+*.sublime-workspace
