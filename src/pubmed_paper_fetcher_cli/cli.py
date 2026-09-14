@@ -1,6 +1,6 @@
 import argparse
 import pandas as pd
-from pubmed_paper_fetcher_cli import fetch_pubmed_ids, fetch_paper_details, save_to_csv
+from pubmed_paper_fetcher_cli.fetch import fetch_pubmed_ids, fetch_paper_details, save_to_csv
 
 def main():
     parser = argparse.ArgumentParser(description="Fetch research papers from PubMed with industry affiliations.")

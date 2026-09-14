@@ -9,23 +9,31 @@ PUBMED_SEARCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
 PUBMED_FETCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
 
 
-NON_ACADEMIC_KEYWORDS = ["Pharma", "Biotech", "Therapeutics", "Genomics", "Biosciences", "Corporation"]
+NON_ACADEMIC_KEYWORDS = [
+    "Pharma", "Biotech", "Therapeutics", "Genomics", "Biosciences", "Corporation",  
+    "Inc.", "Ltd.", "LLC", "GmbH", "S.A.", "Pvt", "PLC", "S.r.l.", "NV", "AG",  
+    "Industries", "Enterprises", "Technologies", "Diagnostics", "Biomedical",  
+    "Research Institute", "Institute of Technology", "Laboratories", "Solutions",  
+    "Life Sciences", "Medical Systems", "MedTech", "Healthcare", "Devices",  
+    "Engineering", "Systems", "AI", "Computing", "Software", "Automation",  
+    "Analytics", "Consulting", "R&D", "Holdings", "Global", "Biosystems",  
+    "Therapeutics", "Molecular", "Health", "Medical", "Genetics", "Neurosciences"
+]
 
 def fetch_pubmed_ids(query: str) -> List[str]:
-    """Fetch PubMed IDs for a given query."""
     params = {
         "db": "pubmed",
         "term": query,
         "retmode": "json",
-        "retmax": 10  # Limit to 10 papers for now
+        "retmax": 10  
     }
     response = requests.get(PUBMED_SEARCH_URL, params=params)
     response.raise_for_status()
     data = response.json()
     return data.get("esearchresult", {}).get("idlist", [])
 
+
 def fetch_paper_details(pubmed_ids: List[str]) -> List[Dict]:
-    """Fetch detailed information for a list of PubMed IDs."""
     if not pubmed_ids:
         return []
     
@@ -58,18 +66,18 @@ def fetch_paper_details(pubmed_ids: List[str]) -> List[Dict]:
                     non_academic_authors.append(author.find(".//LastName").text)
                     company_affiliations.append(affiliation_text)
                 
-                # Extract email using regex
+          
                 email_match = re.search(r'[\w\.-]+@[\w\.-]+', affiliation_text)
                 if email_match and corresponding_email == "N/A":
                     corresponding_email = email_match.group(0)
 
-        # 🔹 Extract email from <CommentsCorrections> if not found
+
         if corresponding_email == "N/A":
             for comment in article.findall(".//CommentsCorrections[@RefType='Correspondence']"):
                 email_match = re.search(r'[\w\.-]+@[\w\.-]+', comment.text if comment.text else "")
                 if email_match:
                     corresponding_email = email_match.group(0)
-                    break  # Stop after finding the first email
+                    break  
         
         papers.append({
             "PubmedID": pmid,
@@ -83,7 +91,6 @@ def fetch_paper_details(pubmed_ids: List[str]) -> List[Dict]:
     return papers
 
 def save_to_csv(papers: List[Dict], filename: str):
-    """Save paper details to a CSV file."""
     df = pd.DataFrame(papers)
     df.to_csv(filename, index=False)
     print(f"Results saved to {filename}")
